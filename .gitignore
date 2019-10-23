@@ -1,0 +1,10 @@
+*.swp
+# idea
+.idea
+
+# mac
+.DS_Store
+
+# java
+target
+*.iml

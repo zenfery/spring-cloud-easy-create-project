@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+    cc.zenfery.easycreateproject.response.CloudResponseAutoConfiguration,\
+    cc.zenfery.easycreateproject.i18n.CloudI18nAutoConfiguration
