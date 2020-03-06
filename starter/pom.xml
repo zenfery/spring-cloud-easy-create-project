@@ -5,8 +5,7 @@
     <parent>
         <artifactId>spring-cloud-easy-create-project</artifactId>
         <groupId>cc.zenfery</groupId>
-        <version>1.0-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
+        <version>1.0.2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 

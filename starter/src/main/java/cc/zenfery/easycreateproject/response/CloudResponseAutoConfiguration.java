@@ -77,9 +77,9 @@ public class CloudResponseAutoConfiguration {
             Status status = Status.ERROR;
 
 
-            String msg = "error";
+            String msg = null;
             if(e instanceof MethodArgumentNotValidException){
-
+                errorCode = "ArgNotValid";
                 msg = "";
                 MethodArgumentNotValidException methodArgumentNotValidException = (MethodArgumentNotValidException)e;
                 List<FieldError> fes = methodArgumentNotValidException.getBindingResult().getFieldErrors();
@@ -92,15 +92,18 @@ public class CloudResponseAutoConfiguration {
             }else if( e instanceof ResponseException){
                 ResponseException re = (ResponseException)e;
                 errorCode = re.getErrorCode();
+                msg = re.getMsg();
                 args = re.getArgs();
 
             }else{
+                msg = "unkown error";
                 args = new String[]{e.getMessage()};
             }
 
             request.setAttribute(REQUEST_ATTR_STATUS, status);
             request.setAttribute(REQUEST_ATTR_ERRORCODE, errorCode);
-            request.setAttribute(REQUEST_ATTR_MSG, this.getMessage(errorCode, args));
+            String i18nMsg = this.getMessage(errorCode, args);
+            request.setAttribute(REQUEST_ATTR_MSG, msg != null ? msg : i18nMsg);
 
             // 此处不能返回null, 若返回 null, CloudCommonResponseBodyAdvice 将不再执行
             return "error";
@@ -112,7 +115,7 @@ public class CloudResponseAutoConfiguration {
             if(isI18nEnabled()){
                 Locale localeFromLocaleContextHolder = LocaleContextHolder.getLocale();
                 log.debug(" ===> current locale is : "+localeFromLocaleContextHolder);
-                return messageSource.getMessage(errorCode, args, errorCode, localeFromLocaleContextHolder);
+                return messageSource.getMessage(errorCode, args, null, localeFromLocaleContextHolder);
             }else{
                 return errorCode;
             }
