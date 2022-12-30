@@ -9,6 +9,7 @@ import java.util.Map;
 public class DefaultCloudResponseHandler implements CloudResponseHandler {
 
     private static final String RESPONSE_STATUS_HEADER_NAME = "Status";
+    private static final String RESPONSE_ERROR_CODE_HEADER_NAME = "Error-Code";
 
     @Override
     public Object handler(HttpServletRequest request, HttpServletResponse response,
@@ -19,7 +20,10 @@ public class DefaultCloudResponseHandler implements CloudResponseHandler {
         if(status == Status.SUCCESS){
             return data;
         }else{
-            Map<String, String> ret = new HashMap<>();
+            response.setHeader(RESPONSE_ERROR_CODE_HEADER_NAME, errorCode);
+
+            Map<String, Object> ret = new HashMap<>();
+            ret.put("status", status.getStat());
             ret.put("errorCode", errorCode);
             ret.put("msg", msg);
             return ret;
