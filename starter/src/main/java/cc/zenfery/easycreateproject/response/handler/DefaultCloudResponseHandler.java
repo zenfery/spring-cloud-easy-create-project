@@ -1,11 +1,15 @@
-package cc.zenfery.easycreateproject.response;
+package cc.zenfery.easycreateproject.response.handler;
 
+import cc.zenfery.easycreateproject.response.CloudResponseHandler;
+import cc.zenfery.easycreateproject.response.Status;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
-// 默认的响应结果处理器
+/**
+ * 默认的响应结果处理器
+ */
 public class DefaultCloudResponseHandler implements CloudResponseHandler {
 
     private static final String RESPONSE_STATUS_HEADER_NAME = "Status";

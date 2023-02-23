@@ -12,13 +12,13 @@ maven 方式引入
 <dependency>
     <groupId>cc.zenfery</groupId>
     <artifactId>spring-cloud-easy-create-project-starter</artifactId>
-    <version>1.0.3</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 gradle 方式引入
 ```gradle
 dependencies {
-    implementation 'cc.zenfery:spring-cloud-easy-create-project-starter:1.0.3'
+    implementation 'cc.zenfery:spring-cloud-easy-create-project-starter:1.1.0'
 }
 ```
 
@@ -68,3 +68,40 @@ Status: 1
     "status": 1
 }
 ```
+
+#### 开启响应自动格式化
+引入包后，默认开启响应自动格式化功能。若需要关闭该功能，需要增加配置 `easycreateproject.response.enabled = false`。
+
+#### 自定义响应格式
+默认采用 `DefaultCloudResponseHandler` 来进行格式化。
+工具包还提供了其它可选项：
+- `CamelBodyCloudResponseHandler`。响应字段全部在 body 中。
+```bash
+## 正确响应
+curl http://localhost:8080/hello -i
+HTTP/1.1 200
+Status: 0
+Content-Type: application/json;charset=UTF-8
+Transfer-Encoding: chunked
+Date: Thu, 23 Feb 2023 07:28:05 GMT
+
+{"data":{"hello":"hello world"},"status":0}
+```
+
+若工具包提供的不能满足需要，也可自定义实现。
+1. 首先定义接口 `CloudResponseHandler` 的实现类。
+2. 将实现注入到 Spring 容器中。
+```java
+@Configuration
+public class ResponseConfiguration {
+
+    @Bean
+    public CloudResponseHandler cloudResponseHandler() {
+        return new CamelBodyCloudResponseHandler();
+    }
+}
+```
+
+## 发布历史
+### 1.1.0 2023-02-23
+- 增加 CamelBodyCloudResponseHandler 格式化处理器。

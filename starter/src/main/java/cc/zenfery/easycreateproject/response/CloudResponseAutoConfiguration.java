@@ -1,6 +1,7 @@
 package cc.zenfery.easycreateproject.response;
 
 import cc.zenfery.easycreateproject.i18n.CloudI18nAutoConfiguration;
+import cc.zenfery.easycreateproject.response.handler.DefaultCloudResponseHandler;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
