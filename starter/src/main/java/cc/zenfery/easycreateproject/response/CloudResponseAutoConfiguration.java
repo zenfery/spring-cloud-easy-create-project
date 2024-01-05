@@ -2,6 +2,7 @@ package cc.zenfery.easycreateproject.response;
 
 import cc.zenfery.easycreateproject.i18n.CloudI18nAutoConfiguration;
 import cc.zenfery.easycreateproject.response.handler.DefaultCloudResponseHandler;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -17,6 +18,7 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.http.server.ServletServerHttpResponse;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -26,6 +28,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -97,14 +100,20 @@ public class CloudResponseAutoConfiguration {
                 args = re.getArgs();
 
             }else{
-                msg = "unkown error";
+                msg = "unkown error: {0}";
                 args = new String[]{e.getMessage()};
             }
 
             request.setAttribute(REQUEST_ATTR_STATUS, status);
             request.setAttribute(REQUEST_ATTR_ERRORCODE, errorCode);
             String i18nMsg = this.getMessage(errorCode, args);
-            request.setAttribute(REQUEST_ATTR_MSG, msg != null ? msg : i18nMsg);
+            String lastMsg = i18nMsg;
+            if(StringUtils.isEmpty(lastMsg)){
+                if(!StringUtils.isEmpty(msg)){
+                    lastMsg = MessageFormat.format(msg, args);
+                }
+            }
+            request.setAttribute(REQUEST_ATTR_MSG, lastMsg);
 
             // 此处不能返回null, 若返回 null, CloudCommonResponseBodyAdvice 将不再执行
             return "error";
@@ -165,6 +174,10 @@ public class CloudResponseAutoConfiguration {
                     , errorCode
                     , msg
                     , body);
+
+            if(body != null && body instanceof String){
+
+            }
             return ret;
         }
 

@@ -8,7 +8,7 @@
 		<version>2.1.8.RELEASE</version>
 		<relativePath/>
 	</parent>
-	<groupId>cc.zenfery.</groupId>
+	<groupId>cc.zenfery</groupId>
 	<artifactId>easycreateproject-example-boot2x</artifactId>
 	<name>easycreateproject-example-boot2x</name>
 	<description>Example Spring boot 2.x</description>

@@ -18,4 +18,9 @@ public class ResponseExampleController {
       put("hello", "hello world");
     }};
   }
+
+  @GetMapping(value = "/hello-string")
+  public String helloStringResponse(){
+    return "hello string";
+  }
 }
