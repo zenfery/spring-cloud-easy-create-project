@@ -111,12 +111,23 @@ public class CloudResponseAutoConfiguration {
             if(StringUtils.isEmpty(lastMsg)){
                 if(!StringUtils.isEmpty(msg)){
                     lastMsg = MessageFormat.format(msg, args);
+                }else{
+                    lastMsg = errorCode + " is occurred.";
                 }
             }
             request.setAttribute(REQUEST_ATTR_MSG, lastMsg);
 
+
+            // 出现异常时，组装响应结果，（注：在此处理是为了让 spring 根据结果来判定需要什么样的结果处理器）
+            // 响应结果将传给 CloudCommonResponseBodyAdvice.beforeBodyWrite() 进行进一步的处理；
+            Object body = getCloudResponseHandler().handler(request, response
+                , status == null ? Status.SUCCESS : status
+                , errorCode
+                , msg
+                , null);
+
             // 此处不能返回null, 若返回 null, CloudCommonResponseBodyAdvice 将不再执行
-            return "error";
+            return body;
         }
 
 
@@ -127,7 +138,7 @@ public class CloudResponseAutoConfiguration {
                 log.debug(" ===> current locale is : "+localeFromLocaleContextHolder);
                 return messageSource.getMessage(errorCode, args, null, localeFromLocaleContextHolder);
             }else{
-                return errorCode;
+                return null;
             }
         }
 
@@ -175,9 +186,6 @@ public class CloudResponseAutoConfiguration {
                     , msg
                     , body);
 
-            if(body != null && body instanceof String){
-
-            }
             return ret;
         }
 

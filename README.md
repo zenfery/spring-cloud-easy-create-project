@@ -14,13 +14,13 @@ maven 方式引入
 <dependency>
     <groupId>cc.zenfery</groupId>
     <artifactId>spring-cloud-easy-create-project-starter</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
 </dependency>
 ```
 gradle 方式引入
 ```gradle
 dependencies {
-    implementation 'cc.zenfery:spring-cloud-easy-create-project-starter:1.1.2'
+    implementation 'cc.zenfery:spring-cloud-easy-create-project-starter:1.1.3'
 }
 ```
 
@@ -135,7 +135,12 @@ public class ResponseConfiguration {
 ```
 
 ## 发布历史
+### 1.1.3 2024-01-08
+- 修改：出现异常优先从国际化message中查找信息，若查找不到，则取异常 ResponseException 中指定的 msg。
+- 解决：异常出现时，视图一直返回 "error" 字符串，导致Spring获取错误的消息转器，导致消息转换异常，进而导致不响应开发者格式化结果。
+
 ### 1.1.2 2024-01-05
 - 优化异常时，msg 的获取逻辑。
+
 ### 1.1.0 2023-02-23
 - 增加 CamelBodyCloudResponseHandler 格式化处理器。
